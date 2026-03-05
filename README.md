@@ -1,16 +1,15 @@
-# safeorbit
+# SafeOrbit
 
-A new Flutter project.
+Overview
 
-## Getting Started
+SafeOrbit is an AI-powered safety awareness platform designed to improve women's safety in public spaces at night.
+The platform collects user feedback about how safe or unsafe a location feels and visualizes this information on a color-coded safety map.
 
-This project is a starting point for a Flutter application.
+By using Natural Language Processing (NLP) and community feedback, EchoMap generates safety heatmaps that help users avoid risky areas and make informed travel decisions.
 
-A few resources to get you started if this is your first Flutter project:
+Problem Statement
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Many women feel unsafe while traveling at night, especially in unfamiliar areas.
+However, there is currently no real-time public safety indicator that reflects how safe a location feels based on community experiences.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+SafeOrbit addresses this gap by allowing users to share safety feedback, which is then analyzed and displayed visually on a map.
