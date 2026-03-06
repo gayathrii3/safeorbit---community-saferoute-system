@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/logo.png" width="120" alt="SafeOrbit Logo" />
+</p>
+
 # SafeOrbit – HeatMap for Safer Streets
 
 ## Overview
@@ -31,9 +35,9 @@ The system analyzes user feedback using AI and sentiment analysis to determine s
 ### Safety Heatmap
 Locations are displayed using color indicators:
 
-- Green – Safe  
-- Yellow – Moderately Safe  
-- Red – Unsafe  
+🟢 **Safe**  
+🟡 **Moderately Safe**  
+🔴 **Unsafe**  
 
 ### AI-Based Sentiment Analysis
 User feedback is analyzed using Natural Language Processing to determine the safety sentiment of a location.
@@ -51,18 +55,6 @@ Helps users avoid unsafe areas before traveling.
 
 ## Technology Stack
 
-### Frontend
-- Flutter
-- Dart
-
-### Backend
-- Python
-- Flask / FastAPI
-
-### AI / Data Processing
-- Natural Language Processing (NLP)
-- Sentiment Analysis
-
-### Map & Visualization
-- Map APIs
-- Heatmap visualization
+| Frontend | Backend | AI / Data | Map & Visualization |
+|----------|---------|-----------|--------------------|
+|  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" width="40"/> Flutter<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" width="40"/> Dart | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> Python<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="40"/> Flask<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="40"/> FastAPI | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> NLP<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> Sentiment Analysis | Map API<br>Heatmap |
