@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dart:math';
+import '../routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,7 +12,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-
   late AnimationController _dropController;
   late AnimationController _swayController;
   late AnimationController _textFadeController;
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
     /// LOGO FALL FROM SKY (stop in middle)
     _dropController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
     );
 
     _dropAnimation = Tween<double>(
@@ -74,6 +75,13 @@ class _SplashScreenState extends State<SplashScreen>
       _swayController.repeat(reverse: true);
       _textFadeController.forward(); // show text after drop
     });
+
+    /// Navigate to auth after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Get.offNamed(AppRoutes.auth);
+      }
+    });
   }
 
   @override
@@ -92,7 +100,12 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: Colors.black,
       body: AnimatedBuilder(
-        animation: Listenable.merge([_dropController, _swayController, _textFadeController, _dotsController]),
+        animation: Listenable.merge([
+          _dropController,
+          _swayController,
+          _textFadeController,
+          _dotsController
+        ]),
         builder: (context, child) {
           final dropY = _dropAnimation.value * screenHeight;
           final diagonalX = _swayAnimation.value;
@@ -123,10 +136,9 @@ class _SplashScreenState extends State<SplashScreen>
                     Text(
                       "SafeOrbit",
                       style: TextStyle(
-                        fontFamily: 'Prestacy', // <- Custom cursive font
-                        color: Color.fromARGB(255, 232, 161, 242),
+                        color: Color(0xFFA855F7),
                         fontSize: 28,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(height: 8),
@@ -162,9 +174,18 @@ class _SplashScreenState extends State<SplashScreen>
             ],
           );
         },
-        child: Image.asset(
-          "assets/logo.png",
+        child: Container(
           width: 230,
+          height: 230,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFFA855F7).withOpacity(0.1),
+          ),
+          child: Icon(
+            Icons.shield,
+            size: 120,
+            color: const Color(0xFFA855F7),
+          ),
         ),
       ),
     );

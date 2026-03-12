@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'Screens/splash_screen.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,9 +13,8 @@ class SafeOrbitApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-
       title: 'SafeOrbit',
 
       /// Theme
@@ -24,8 +25,9 @@ class SafeOrbitApp extends StatelessWidget {
         fontFamily: 'Inter',
       ),
 
-      /// Splash Screen First
-      home: const SplashScreen(),
+      /// Navigation Setup with GetX
+      initialRoute: AppRoutes.splash,
+      getPages: AppRoutes.routes,
     );
   }
 }
