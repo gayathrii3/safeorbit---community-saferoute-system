@@ -1,60 +1,103 @@
 <p align="center">
-  <img src="./assets/logo.png" width="120" alt="SafeOrbit Logo" />
+  <img src="./assets/logo.png" width="300" alt="SafeOrbit Logo" />
 </p>
 
-# SafeOrbit – HeatMap for Safer Streets
+# SafeOrbit – AI-Powered HeatMap & Routing for Safer Streets
+
+> **Note**: This project is a **Minimum Viable Product (MVP)**. It serves as a proof-of-concept for community safety mapping. The current version utilizes simulated local data and routing heuristics to demonstrate the platform's core capabilities.
 
 ## Overview
-Safeorbit is an AI-powered safety awareness platform designed to improve women's safety in public spaces at night. The platform collects user feedback about how safe or unsafe a location feels and visualizes this information on a color-coded safety map.
+SafeOrbit is an advanced, AI-powered safety intelligence platform designed to improve security in public spaces. The platform collects real-time user feedback, analyzes risk factors via NLP sentiment analysis, and visualizes this information on a dynamic, color-coded safety heatmap.
 
-By using Natural Language Processing (NLP) and community feedback, Safeorbit generates safety heatmaps that help users avoid risky areas and make informed travel decisions.
-
----
-
-## Problem Statement
-Many women feel unsafe while traveling at night, especially in unfamiliar areas. However, there is currently no real-time public safety indicator that reflects how safe a location feels based on community experiences.
-
-Safeorbit addresses this gap by allowing users to share safety feedback, which is then analyzed and displayed visually on a map.
+By leveraging real-time data, granular time-of-day contextual analysis, and community feedback, SafeOrbit generates responsive safety heatmaps and intelligent routing that help users avoid risky areas and make informed travel decisions.
 
 ---
 
-## Solution
-Safeorbit creates a crowd-powered safety intelligence system where users can:
+## Architecture Diagram
 
-- Share short feedback about locations
-- Report whether a place feels safe or unsafe
-- View safety levels through a map-based heatmap
-- Avoid risky areas using real-time community insights
+```mermaid
+graph TD
+    A[User Interface HTML/JS/CSS] -->|Routing Requests| B[Leaflet Routing Machine]
+    A -->|Submit Reports| C[Flask Backend POST /api/report]
+    A -->|Fetch Map Data| D[Flask Backend GET /api/safety-data]
+    A -->|Fetch Route Score| E[Flask Backend GET /api/route-score]
+    
+    C -->|Rate Limiting Check| F[IP Cooldown Cache]
+    F -->|Store Incident| G[(SQLite Database)]
+    
+    D -->|Generate Points| H[AI Sentiment Analyzer]
+    H -->|Calculate NLP Score| I[Dynamic Time Risk Modifiers]
+    I -->|Return JSON| A
+    
+    E -->|Time Analysis| I
+```
 
-The system analyzes user feedback using AI and sentiment analysis to determine safety levels.
+---
+
+## Screenshots
+
+*(Note: Add actual screenshots to the `assets` folder once deployed)*
+
+| Live Heatmap | Incident Reporting |
+|---|---|
+| <img src="./assets/heatmap_screenshot.png" alt="Map View" width="400"/> | <img src="./assets/report_modal.png" alt="Report Incident Modal" width="400"/> |
+
+| Safe Routing (Day) | High Risk Routing (Night) |
+|---|---|
+| <img src="./assets/route_safe.png" alt="Safe Route" width="400"/> | <img src="./assets/route_unsafe.png" alt="Unsafe Route" width="400"/> |
 
 ---
 
 ## Key Features
 
-### Safety Heatmap
-Locations are displayed using color indicators:
+### AI Sentiment Analysis
+Safety indicators aren't just random. The backend Python server utilizes Natural Language Processing (NLP) keyword-matching to analyze community reviews (e.g., "dark", "harassment", "safe", "lit"). The sentiment directly influences the safety score and color of an area.
 
-🟢 **Safe**  
-🟡 **Moderately Safe**  
-🔴 **Unsafe**  
+### Advanced Glowing Heatmap Visualization
+Locations are displayed using a professional glowing heatmap effect via overlapping, borderless Leaflet circles:
+- **Safe**: High community trust, well-lit.
+- **Moderately Safe**: Exercise Caution.
+- **Unsafe**: High Risk Area based on poor sentiment and time.
 
-### AI-Based Sentiment Analysis
-User feedback is analyzed using Natural Language Processing to determine the safety sentiment of a location.
+### Intelligent Safe Routing & Dynamic Coloring
+Input an origin and destination to calculate a route. SafeOrbit provides an **Overall Safety Score** out of 100. The routing line drawn on the map dynamically changes color (Green, Yellow, Red) based on the calculated safety score for the journey.
 
-### Community Feedback System
-Users can share short reviews describing their experience in a particular place.
+### Granular Time-Based Safety
+Safety risks change drastically when the sun goes down. SafeOrbit features an exact Time Input that dynamically recalculates heatmaps and route safety scores based on the specific hour, heavily penalizing late-night travel in unlit areas.
 
-### Smart Safety Visualization
-Safety levels are displayed on a map using heatmap visualization for quick understanding.
+### Emergency Location Integration
+The map automatically generates and plots nearby emergency POIs including Police Stations, Hospitals, and Metro Stops using custom FontAwesome icons to assist users in distress.
 
-### Awareness & Prevention
-Helps users avoid unsafe areas before traveling.
+### Incident Reporting & Fake Report Prevention
+A seamless UI modal allows users to submit General Safety Feedback or report specific incidents. To prevent spam, the backend enforces a strict IP-based 60-second rate limiter (`429 Too Many Requests`). Reports are securely stored in a local SQLite database.
 
 ---
 
 ## Technology Stack
 
-| Frontend | Backend | AI / Data | Map & Visualization |
-|----------|---------|-----------|--------------------|
-|  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" width="40"/> Flutter<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" width="40"/> Dart | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> Python<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="40"/> Flask<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="40"/> FastAPI | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> NLP<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> Sentiment Analysis | Map API<br>Heatmap |
+| Frontend | Backend & AI | Map & Visualization | Database |
+|----------|---------|---------------------|----------|
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="40"/> HTML5<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="40"/> Vanilla CSS<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40"/> JavaScript | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40"/> Python<br><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="40"/> Flask | <img src="https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png" width="20"/> Leaflet.js<br><img src="https://nominatim.org/images/logo.png" width="40"/> Nominatim API | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" width="40"/> SQLite |
+
+---
+
+## Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/SafeOrbit.git
+   cd SafeOrbit
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install flask
+   ```
+
+3. **Run the Flask application:**
+   ```bash
+   python web.py
+   ```
+
+4. **Access the application:**
+   Open your browser and navigate to `http://127.0.0.1:5000`

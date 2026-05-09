@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeOrbit</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Icons (Lucide - Premium Open Source Icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet Routing Machine CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Premium Desktop Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="SafeOrbit Logo">
+                <span>SafeOrbit</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">About</a>
+                <a href="#map">Live Map</a>
+                <a href="#report" class="btn-alert"><i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i> Report</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container" style="justify-content: center; text-align: center;">
+            <div class="footer-brand" style="align-items: center; max-width: 600px; margin: 0 auto;">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="SafeOrbit Logo" class="footer-logo">
+                <p style="margin-bottom: 8px; font-size: 18px;"><strong>SafeOrbit (MVP)</strong></p>
+                <p style="color: var(--text-muted); font-size: 14px;">This is a Minimum Viable Product developed as a proof-of-concept for community safety and intelligent mapping. The data represented is simulated for demonstration purposes.</p>
+            </div>
+        </div>
+        <div class="footer-bottom" style="text-align: center;">
+            <p>&copy; 2026 SafeOrbit MVP Project. Created for demonstration purposes.</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

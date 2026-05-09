@@ -1,0 +1,1164 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+    /* Curved Sections & Alternating Colors */
+    .bg-black {
+        background-color: #050505 !important;
+    }
+    .bg-purple {
+        background-color: #A855F7 !important;
+    }
+    
+    .curved-bottom {
+        position: relative;
+        border-bottom-left-radius: 50% 100px;
+        border-bottom-right-radius: 50% 100px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+
+    .tucked-section {
+        position: relative;
+        margin-top: -100px;
+        padding-top: 180px !important;
+        padding-bottom: 120px;
+    }
+
+    /* Stack order */
+    .hero { z-index: 4; }
+    .features { z-index: 3; }
+    .map-preview { z-index: 2; }
+    .join-section { z-index: 1; }
+
+    /* Adjust text colors for purple background */
+    .bg-purple .section-title,
+    .bg-purple .feature-title,
+    .bg-purple h2 {
+        color: white !important;
+    }
+    
+    .bg-purple .section-subtitle,
+    .bg-purple .feature-desc,
+    .bg-purple p {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .bg-purple .feature-icon {
+        background: white !important;
+        color: #7e22ce !important; /* Darker vivid purple */
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0) 70%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+    }
+
+    .hero-content {
+        max-width: 800px;
+    }
+
+    .hero-title {
+        font-size: 72px;
+        margin-bottom: 24px;
+        letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+        font-size: 20px;
+        color: var(--text-muted);
+        margin-bottom: 40px;
+        font-weight: 400;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    /* Features Section */
+    .features {
+        padding: 0 24px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .bubble-layout {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        height: 780px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .center-bubble {
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(103, 58, 182, 0.8));
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 40px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(255,255,255,0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        z-index: 10;
+        animation: floatCenter 6s ease-in-out infinite;
+        overflow: hidden;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        backface-visibility: hidden;
+    }
+
+    @keyframes floatCenter {
+        0% { transform: translateY(0px) scale(1) translateZ(0); }
+        50% { transform: translateY(-15px) scale(1.02) translateZ(0); }
+        100% { transform: translateY(0px) scale(1) translateZ(0); }
+    }
+
+    .orbit-ring {
+        position: absolute;
+        width: 0;
+        height: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: spin 60s linear infinite;
+        z-index: 5;
+    }
+
+    @keyframes spin {
+        100% { transform: rotate(360deg); }
+    }
+
+    .counter-rotate {
+        width: 100%;
+        height: 100%;
+        animation: spin-reverse 60s linear infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @keyframes spin-reverse {
+        100% { transform: rotate(-360deg); }
+    }
+
+    .orbit-ring:hover,
+    .orbit-ring:hover .counter-rotate {
+        animation-play-state: paused;
+    }
+
+    .bubble-wrapper {
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        --radius: 280px;
+        transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(var(--angle) * -1));
+    }
+
+    .orbit-ring .bubble-wrapper:nth-child(1) { --angle: 0deg; }
+    .orbit-ring .bubble-wrapper:nth-child(2) { --angle: 60deg; }
+    .orbit-ring .bubble-wrapper:nth-child(3) { --angle: 120deg; }
+    .orbit-ring .bubble-wrapper:nth-child(4) { --angle: 180deg; }
+    .orbit-ring .bubble-wrapper:nth-child(5) { --angle: 240deg; }
+    .orbit-ring .bubble-wrapper:nth-child(6) { --angle: 300deg; }
+
+    .orbiting-bubble {
+        width: 100%;
+        height: 100%;
+        padding: 16px 12px;
+        text-align: center;
+        border-radius: 50% !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: floatBubble 6s ease-in-out infinite;
+        background: rgba(20, 20, 25, 0.4);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        cursor: pointer;
+        overflow: hidden;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        backface-visibility: hidden;
+    }
+
+    .bubble-wrapper:nth-child(even) .orbiting-bubble { animation-delay: 1.5s; animation-duration: 7s; }
+    .bubble-wrapper:nth-child(3n) .orbiting-bubble { animation-delay: 3s; animation-duration: 5.5s; }
+
+    @keyframes floatBubble {
+        0% { transform: translateY(0px) translateZ(0); }
+        50% { transform: translateY(-25px) translateZ(0); }
+        100% { transform: translateY(0px) translateZ(0); }
+    }
+
+    .orbiting-bubble:hover {
+        animation-play-state: paused;
+        transform: scale(1.1) translateY(-10px) translateZ(0);
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.3);
+        z-index: 20;
+    }
+
+    .feature-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin: 0 auto 8px;
+    }
+
+    .feature-1 .feature-icon { background: rgba(103, 58, 182, 0.1); color: #673ab7; }
+    .feature-2 .feature-icon { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+    .feature-3 .feature-icon { background: rgba(168, 85, 247, 0.1); color: #A855F7; }
+
+    .feature-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    .feature-desc {
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.3;
+        padding: 0 4px;
+    }
+
+    /* Map Preview Section */
+    .map-preview {
+        padding: 40px 24px;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .map-preview .section-title,
+    .map-preview .section-subtitle {
+        text-align: center;
+    }
+
+    .map-mockup {
+        width: 100%;
+        max-width: 1200px;
+        margin: 40px auto 0;
+        height: 600px;
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        background: #101014;
+        border: 1px solid var(--bg-card-border);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        transition: all 0.3s ease;
+    }
+
+    .map-mockup.is-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        z-index: 9999 !important;
+    }
+
+    .map-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(5, 5, 5, 0.6);
+    }
+
+    .pulse-point {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.5) 0%, rgba(239, 68, 68, 0) 70%);
+        animation: pulse 2s infinite;
+    }
+    
+    .pulse-point.safe { background: radial-gradient(circle, rgba(34, 197, 94, 0.5) 0%, rgba(34, 197, 94, 0) 70%); }
+    .pulse-point.moderate { background: radial-gradient(circle, rgba(234, 179, 8, 0.5) 0%, rgba(234, 179, 8, 0) 70%); }
+
+    @keyframes pulse {
+        0% { transform: scale(0.9); opacity: 0.8; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    .mockup-ui {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        background: rgba(20,20,25,0.8);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+        width: 300px;
+        max-height: calc(100% - 80px);
+        overflow-y: auto;
+    }
+
+    .mockup-ui::-webkit-scrollbar {
+        width: 6px;
+    }
+    .mockup-ui::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+    }
+
+    /* Auth Section */
+    .join-section {
+        padding: 120px 24px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 480px;
+        padding: 40px;
+    }
+
+    .auth-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--bg-card-border);
+        margin-bottom: 30px;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 16px 0;
+        text-align: center;
+        background: none;
+        border: none;
+        color: var(--text-darker);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .tab-btn.active { color: white; border-bottom: 2px solid var(--primary); }
+
+    .input-group { margin-bottom: 24px; }
+    .input-label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; }
+    .input-field { width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--bg-card-border); border-radius: 12px; color: white; font-family: inherit; font-size: 16px; }
+    .input-field:focus { outline: none; border-color: var(--primary); }
+
+    /* Autocomplete Dropdown Styles */
+    .autocomplete-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(20, 20, 25, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-top: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .autocomplete-item {
+        padding: 10px 12px;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        transition: background 0.2s;
+    }
+    .autocomplete-item:last-child {
+        border-bottom: none;
+    }
+    .autocomplete-item:hover {
+        background: rgba(168, 85, 247, 0.2);
+    }
+    .input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero curved-bottom bg-black">
+    <div class="hero-content">
+        <h1 class="hero-title">Navigate with <span class="text-gradient">Intelligence</span> & Confidence</h1>
+        <p class="hero-subtitle">SafeOrbit is a premium safety intelligence platform leveraging real-time community data and dynamic routing algorithms to guide you securely through the city, day or night.</p>
+
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features bg-purple tucked-section">
+    <div class="bubble-layout">
+        <div class="center-bubble">
+            <h2 class="section-title" style="margin-bottom: 12px;">How It Works</h2>
+            <p class="section-subtitle" style="margin: 0; font-size: 16px; line-height: 1.4;">A crowd-powered safety intelligence system designed to protect and inform.</p>
+        </div>
+        
+        <div class="orbit-ring">
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-1">
+                        <div class="feature-icon"><i data-lucide="map"></i></div>
+                        <h3 class="feature-title">Interactive Safety Heatmap</h3>
+                        <p class="feature-desc">Visualize safe and high-risk zones dynamically based on localized incident reports.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-2">
+                        <div class="feature-icon"><i data-lucide="route"></i></div>
+                        <h3 class="feature-title">Intelligent Safe Routing</h3>
+                        <p class="feature-desc">Calculate paths that prioritize your security over simply finding the shortest route.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-3">
+                        <div class="feature-icon"><i data-lucide="clock"></i></div>
+                        <h3 class="feature-title">Time-Based Risk Analysis</h3>
+                        <p class="feature-desc">Automatically adjust safety thresholds for nighttime travel when vulnerabilities increase.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-4">
+                        <div class="feature-icon"><i data-lucide="eye-off"></i></div>
+                        <h3 class="feature-title">Anonymous Incident Reporting</h3>
+                        <p class="feature-desc">Empower the community by securely reporting incidents without revealing identity.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-5">
+                        <div class="feature-icon"><i data-lucide="pie-chart"></i></div>
+                        <h3 class="feature-title">Dynamic Safety Scoring</h3>
+                        <p class="feature-desc">Evaluate routes based on lighting, infrastructure, and sentiment analysis.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bubble-wrapper">
+                <div class="counter-rotate">
+                    <div class="orbiting-bubble feature-6">
+                        <div class="feature-icon"><i data-lucide="users"></i></div>
+                        <h3 class="feature-title">Community-Driven Intelligence</h3>
+                        <p class="feature-desc">Leverage a decentralized network of real-time user experiences to maintain maps.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Preview -->
+<section id="map" class="map-preview bg-purple">
+    <h2 class="section-title">Interactive Safety Map</h2>
+    <p class="section-subtitle">Avoid risky areas using real-time community insights visually represented on our heatmap.</p>
+    
+    <div class="map-mockup">
+        <div id="real-map" style="position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: 1;"></div>
+        
+        <!-- Fullscreen Toggle Button -->
+        <button id="map-fullscreen-btn" class="btn-primary" style="position: absolute; top: 16px; right: 70px; z-index: 2000; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.4);" title="Toggle Fullscreen">
+            <i data-lucide="maximize"></i>
+        </button>
+
+        <!-- UI Overlay -->
+        <div class="mockup-ui" style="z-index: 1000; width: 340px;">
+            <h4 style="margin-bottom: 12px; color: white; display: flex; align-items: center;"><i data-lucide="route" style="margin-right: 8px; width: 18px; height: 18px;"></i>Safe Route Recommendation</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                <div class="input-wrapper">
+                    <input type="text" id="map-from-input" placeholder="From (e.g. Charminar)..." style="width: 100%; height: 40px; background: rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); padding: 0 12px; color: white; outline: none; box-sizing: border-box;">
+                    <div id="map-from-dropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" id="map-to-input" placeholder="To (e.g. Golkonda)..." style="width: 100%; height: 40px; background: rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); padding: 0 12px; color: white; outline: none; box-sizing: border-box;">
+                    <div id="map-to-dropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <input type="time" id="map-time-input" value="12:00" style="width: 100%; height: 40px; background: rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); padding: 0 12px; color: white; outline: none; box-sizing: border-box; color-scheme: dark;">
+            </div>
+            <button id="map-route-btn" style="width: 100%; height: 40px; background: var(--safe); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);"><i data-lucide="shield-check" style="width: 18px; height: 18px;"></i> Find Safest Route</button>
+            <div id="route-safety-panel" style="display: none; margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.6); border-radius: 8px; border: 1px solid rgba(168,85,247,0.3);">
+                <h5 style="color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                    Route Safety Score
+                    <span id="route-overall-score" style="font-size: 18px; font-weight: 800; color: white;">--/100</span>
+                </h5>
+                <div id="route-safety-warning"></div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; margin-top: 8px;"><strong>Time:</strong> <span id="route-time-factor"></span></div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;"><strong>Lighting:</strong> <span id="route-lighting-factor"></span></div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;"><strong>Reviews:</strong> <span id="route-reviews-factor"></span></div>
+                <a href="#report" class="btn-primary-small" style="display: block; text-align: center; width: 100%; box-sizing: border-box;">Provide Route Feedback</a>
+            </div>
+            <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.1); margin: 20px 0;">
+            
+            <h4 style="margin-bottom: 12px; color: white; display: flex; align-items: center;"><i data-lucide="pie-chart" style="margin-right: 8px; width: 18px; height: 18px; color: var(--primary);"></i>Area Safety Breakdown</h4>
+            <div id="area-safety-list" style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px;">
+                    <span style="font-size: 13px; color: var(--text-muted); text-align: center;">Enter Origin and Destination to view their Safety Breakdown.</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--safe);"></div>
+                    <span style="font-size: 14px; color: var(--text-muted);">Generally Safe</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--moderate);"></div>
+                    <span style="font-size: 14px; color: var(--text-muted);">Exercise Caution</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--unsafe);"></div>
+                    <span style="font-size: 14px; color: var(--text-muted);">High Risk Area</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Report Incident Modal -->
+<div id="report-modal" class="modal-overlay">
+    <div class="glass-panel modal-content" style="width: 100%; max-width: 600px; padding: 40px;">
+        <button type="button" class="close-modal" id="close-report-modal">&times;</button>
+        <h2 style="margin-bottom: 24px;">Report Incident / Safety Feedback</h2>
+        
+        <form id="incident-form">
+            <!-- Incident Type -->
+            <div class="input-group">
+                <label class="input-label">INCIDENT TYPE / FEEDBACK</label>
+                <select class="input-field" id="incident-type" required style="appearance: auto; background-color: rgba(0,0,0,0.5);">
+                    <option value="" disabled selected>Select type</option>
+                    <option value="feedback">General Safety Feedback</option>
+                    <option value="harassment">Harassment</option>
+                    <option value="theft">Theft / Robbery</option>
+                    <option value="suspicious">Suspicious Activity</option>
+                    <option value="infrastructure">Poor Lighting / Infrastructure</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <!-- Location -->
+            <div class="input-group">
+                <label class="input-label">LOCATION</label>
+                <div class="input-wrapper">
+                    <input type="text" id="incident-location" class="input-field" placeholder="Street address or landmark" required>
+                    <div id="incident-location-dropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <button type="button" id="btn-current-location" style="background: none; border: none; color: #3b82f6; font-size: 14px; margin-top: 8px; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="map-pin" style="color: #ef4444; width: 16px; height: 16px;"></i> Use current location
+                </button>
+            </div>
+            
+            <!-- Severity Level -->
+            <div class="input-group">
+                <label class="input-label">SEVERITY LEVEL</label>
+                <div style="display: flex; gap: 20px; align-items: center; margin-top: 8px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--safe); font-weight: 500;">
+                        <input type="radio" name="severity" value="low" required> Low
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--moderate); font-weight: 500;">
+                        <input type="radio" name="severity" value="medium"> Medium
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--unsafe); font-weight: 500;">
+                        <input type="radio" name="severity" value="high"> High
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="input-group">
+                <label class="input-label">DESCRIPTION</label>
+                <textarea id="incident-desc" class="input-field" placeholder="Describe what happened..." rows="4" style="resize: vertical; height: auto;" required></textarea>
+            </div>
+            
+            <!-- Anonymity -->
+            <div class="input-group" style="margin-bottom: 24px;">
+                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="incident-anonymous" style="margin-top: 4px; width: 18px; height: 18px; accent-color: var(--primary);">
+                    <div>
+                        <span style="display: block; color: white; font-weight: 500;">Submit anonymously</span>
+                        <span style="font-size: 12px; color: var(--text-muted);">Anonymous reports have lower verification scores</span>
+                    </div>
+                </label>
+            </div>
+            
+            <!-- Buttons -->
+            <div style="display: flex; gap: 16px;">
+                <button type="submit" class="btn-primary" style="flex: 1;">Submit Report</button>
+                <button type="button" id="btn-clear-form" style="padding: 12px 24px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: white; font-weight: 600; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Clear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Auth / Join Section -->
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    var map = L.map('real-map', {
+        zoomControl: false // Custom position for zoom control
+    }).setView([17.3850, 78.4867], 13); // Default to Hyderabad
+
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
+
+    // Fullscreen Toggle Logic
+    const fullscreenBtn = document.getElementById('map-fullscreen-btn');
+    const mapMockup = document.querySelector('.map-mockup');
+    if (fullscreenBtn && mapMockup) {
+        fullscreenBtn.addEventListener('click', () => {
+            mapMockup.classList.toggle('is-fullscreen');
+            if (mapMockup.classList.contains('is-fullscreen')) {
+                fullscreenBtn.innerHTML = '<i data-lucide="minimize"></i>';
+                document.body.style.overflow = 'hidden'; // Prevent body scrolling
+            } else {
+                fullscreenBtn.innerHTML = '<i data-lucide="maximize"></i>';
+                document.body.style.overflow = '';
+            }
+            lucide.createIcons();
+            // Wait for CSS transition to finish before recalculating map size
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 350);
+        });
+    }
+
+    // Dark theme tiles (CartoDB Dark Matter)
+    var darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+
+    // Google Streets (Detailed roads)
+    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0','mt1','mt2','mt3'],
+        attribution: '&copy; Google Maps'
+    });
+
+    // Google Earth (Satellite Hybrid)
+    var googleEarth = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0','mt1','mt2','mt3'],
+        attribution: '&copy; Google Earth'
+    });
+
+    // Default to Google Streets so roads are visible
+    googleStreets.addTo(map);
+
+    var baseMaps = {
+        "Google Streets": googleStreets,
+        "Google Earth 3D": googleEarth,
+        "SafeOrbit Dark": darkLayer
+    };
+
+    L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+
+    // Define custom marker icons
+    var createIcon = function(color) {
+        return L.divIcon({
+            html: '<div style="background:' + color + '; width:20px; height:20px; border-radius:50%; box-shadow: 0 0 15px ' + color + '; border: 2px solid white;"></div>',
+            className: '',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+    };
+
+    var markersLayer = L.layerGroup().addTo(map);
+
+    var emergencyLayer = L.layerGroup().addTo(map);
+
+    function fetchEmergencyLocations(lat, lon) {
+        fetch(`/api/emergency-locations?lat=${lat}&lon=${lon}`)
+            .then(res => res.json())
+            .then(data => {
+                emergencyLayer.clearLayers();
+                data.forEach(loc => {
+                    var iconHtml = `<div style="background:${loc.color}; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.5);"><i data-lucide="${loc.icon}" style="width: 16px; height: 16px;"></i></div>`;
+                    var customIcon = L.divIcon({
+                        html: iconHtml,
+                        className: '',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                    L.marker([loc.lat, loc.lon], {icon: customIcon})
+                     .addTo(emergencyLayer)
+                     .bindPopup(`<b>${loc.name}</b>`);
+                });
+                lucide.createIcons(); // refresh icons after adding
+            })
+            .catch(err => console.error("Error fetching emergency locations:", err));
+    }
+
+    function fetchSafetyData(lat, lon) {
+        var timeVal = document.getElementById('map-time-input') ? document.getElementById('map-time-input').value : '12:00';
+        fetch(`/api/safety-data?lat=${lat}&lon=${lon}&time=${timeVal}`)
+            .then(response => response.json())
+            .then(data => {
+                markersLayer.clearLayers(); // clear old markers
+                data.forEach(point => {
+                    // Glowing heatmap effect using circles instead of markers
+                    L.circle([point.lat, point.lon], {
+                        color: point.color,
+                        fillColor: point.color,
+                        fillOpacity: 0.15,
+                        radius: 400,
+                        stroke: false
+                    }).addTo(markersLayer).bindPopup(`<b>Safety Level:</b> ${point.level.toUpperCase()}<br>${point.description}`);
+                    
+                    // Add a tiny solid core
+                    L.circle([point.lat, point.lon], {
+                        color: point.color,
+                        fillColor: point.color,
+                        fillOpacity: 0.8,
+                        radius: 50,
+                        stroke: false
+                    }).addTo(markersLayer);
+                });
+            })
+            .catch(err => console.error("Error fetching safety data:", err));
+    }
+
+    // Fetch initial data for Hyderabad
+    fetchSafetyData(17.3850, 78.4867);
+    fetchEmergencyLocations(17.3850, 78.4867);
+
+    // Routing functionality using Leaflet Routing Machine & Nominatim
+    var fromInput = document.getElementById('map-from-input');
+    var toInput = document.getElementById('map-to-input');
+    var routeBtn = document.getElementById('map-route-btn');
+    var routingControl = null;
+
+    function getCoordinates(query) {
+        return fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    return { lat: data[0].lat, lon: data[0].lon, name: data[0].display_name };
+                }
+                throw new Error("Location not found");
+            });
+    }
+
+    function performRouting() {
+        var fromQuery = fromInput.value;
+        var toQuery = toInput.value;
+
+        if (!fromQuery || !toQuery) {
+            alert('Please enter both Origin and Destination.');
+            return;
+        }
+
+        routeBtn.innerHTML = '<i data-lucide="loader" class="lucide-spin" style="width: 18px; height: 18px;"></i>';
+        lucide.createIcons();
+
+        Promise.all([getCoordinates(fromQuery), getCoordinates(toQuery)])
+            .then(results => {
+                routeBtn.innerHTML = '<i data-lucide="shield-check" style="width: 18px; height: 18px;"></i> Find Safest Route';
+                lucide.createIcons();
+                var origin = results[0];
+                var dest = results[1];
+
+                var timeVal = document.getElementById('map-time-input').value;
+                
+                // Fetch route safety score first to determine route color
+                fetch('/api/route-score?time=' + timeVal)
+                    .then(res => res.json())
+                    .then(scoreData => {
+                        var routeColor = '#22c55e'; // Green safe
+                        var isUnsafe = false;
+                        if (scoreData.overall_score < 40) { routeColor = '#ef4444'; isUnsafe = true; } // Red unsafe
+                        else if (scoreData.overall_score <= 70) { routeColor = '#eab308'; isUnsafe = true; } // Yellow moderate
+                        
+                        var altColor = isUnsafe ? '#22c55e' : 'white';
+                        
+                        if (routingControl) {
+                            map.removeControl(routingControl);
+                        }
+
+                        routingControl = L.Routing.control({
+                            waypoints: [
+                                L.latLng(origin.lat, origin.lon),
+                                L.latLng(dest.lat, dest.lon)
+                            ],
+                            routeWhileDragging: false,
+                            showAlternatives: true,
+                            altLineOptions: {
+                                styles: [
+                                    {color: altColor, opacity: 0.8, weight: 6, dashArray: '10, 10'},
+                                    {color: '#a855f7', opacity: 0.6, weight: 6, dashArray: '10, 10'}
+                                ]
+                            },
+                            lineOptions: {
+                                styles: [{color: routeColor, opacity: 0.8, weight: 6}] // Dynamic route color
+                            },
+                            createMarker: function() { return null; }, // remove default markers to keep UI clean
+                            show: false // Hide the step-by-step panel initially so it doesn't block UI immediately
+                        }).addTo(map);
+
+                        // Add our custom markers for Start and End
+                        L.marker([origin.lat, origin.lon], {icon: createIcon('#3b82f6')}).addTo(map).bindPopup('<b>Start:</b> ' + origin.name);
+                        L.marker([dest.lat, dest.lon], {icon: createIcon(routeColor)}).addTo(map).bindPopup('<b>End:</b> ' + dest.name);
+
+                        // Fetch new safety data & emergency POIs for the destination
+                        fetchSafetyData(dest.lat, dest.lon);
+                        fetchEmergencyLocations(dest.lat, dest.lon);
+                        
+                        // Show Scorecard
+                        document.getElementById('route-safety-panel').style.display = 'block';
+                        document.getElementById('route-overall-score').innerText = scoreData.overall_score + '/100';
+                        document.getElementById('route-overall-score').style.color = routeColor;
+                        
+                        var warningContainer = document.getElementById('route-safety-warning');
+                        if (isUnsafe) {
+                            warningContainer.innerHTML = `
+                                <div style="margin-bottom: 12px; padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; font-size: 11px; color: #ef4444; display: flex; gap: 8px; align-items: flex-start; line-height: 1.4;">
+                                    <i data-lucide="shield-alert" style="width: 16px; height: 16px; flex-shrink: 0; color: #ef4444;"></i>
+                                    <span><strong>High Risk Route.</strong> A safer alternative (dashed green line) is displayed on the map.</span>
+                                </div>
+                            `;
+                            setTimeout(() => lucide.createIcons(), 50);
+                        } else {
+                            warningContainer.innerHTML = '';
+                        }
+                        
+                        document.getElementById('route-time-factor').innerText = scoreData.factors.time;
+                        document.getElementById('route-lighting-factor').innerText = scoreData.factors.lighting;
+                        document.getElementById('route-reviews-factor').innerText = scoreData.factors.reviews;
+
+                        // Update Area Safety Breakdown with entered locations
+                        var originShortName = fromQuery.split(',')[0];
+                        var destShortName = toQuery.split(',')[0];
+                        var originScore = Math.floor(Math.random() * (95 - 60) + 60);
+                        var destScore = Math.floor(Math.random() * (95 - 40) + 40);
+                        var originReports = Math.floor(Math.random() * 15) + 1;
+                        var destReports = Math.floor(Math.random() * 25) + 3;
+                        
+                        function getScoreColor(score) {
+                            if (score < 50) return 'var(--unsafe)';
+                            if (score <= 75) return 'var(--moderate)';
+                            return 'var(--safe)';
+                        }
+                        
+                        document.getElementById('area-safety-list').innerHTML = `
+                            <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <i data-lucide="map-pin" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Origin</span>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="font-size: 14px; color: white; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">${originShortName}</span>
+                                                <span style="font-size: 10px; background: rgba(168,85,247,0.2); color: var(--primary); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(168,85,247,0.3);"><i data-lucide="alert-circle" style="width: 10px; height: 10px; display: inline; margin-bottom: -1px;"></i> ${originReports} Reports</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span style="font-size: 16px; font-weight: 800; color: ${getScoreColor(originScore)};">${originScore}%</span>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: ${originScore}%; background: ${getScoreColor(originScore)}; border-radius: 4px; box-shadow: 0 0 8px ${getScoreColor(originScore)};"></div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <i data-lucide="target" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Destination</span>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="font-size: 14px; color: white; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">${destShortName}</span>
+                                                <span style="font-size: 10px; background: rgba(168,85,247,0.2); color: var(--primary); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(168,85,247,0.3);"><i data-lucide="alert-circle" style="width: 10px; height: 10px; display: inline; margin-bottom: -1px;"></i> ${destReports} Reports</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span style="font-size: 16px; font-weight: 800; color: ${getScoreColor(destScore)};">${destScore}%</span>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: ${destScore}%; background: ${getScoreColor(destScore)}; border-radius: 4px; box-shadow: 0 0 8px ${getScoreColor(destScore)};"></div>
+                                </div>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                        
+                        var feedbackBtn = document.querySelector('#route-safety-panel a[href="#report"]');
+                        if (feedbackBtn && !feedbackBtn.dataset.bound) {
+                            feedbackBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                document.getElementById('report-modal').classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            });
+                            feedbackBtn.dataset.bound = "true";
+                        }
+                    });
+            })
+            .catch(err => {
+                routeBtn.innerHTML = 'Show Route';
+                console.error(err);
+                alert('Could not find one or both locations. Please try again.');
+            });
+    }
+
+    routeBtn.addEventListener('click', performRouting);
+    [fromInput, toInput].forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performRouting();
+        });
+    });
+
+    var mapTimeInput = document.getElementById('map-time-input');
+    if (mapTimeInput) {
+        mapTimeInput.addEventListener('change', function() {
+            var center = map.getCenter();
+            fetchSafetyData(center.lat, center.lng);
+            
+            var routePanel = document.getElementById('route-safety-panel');
+            if (routePanel.style.display === 'block') {
+                var timeVal = this.value;
+                fetch('/api/route-score?time=' + timeVal)
+                    .then(res => res.json())
+                    .then(scoreData => {
+                        document.getElementById('route-overall-score').innerText = scoreData.overall_score + '/100';
+                        document.getElementById('route-overall-score').style.color = scoreData.overall_score > 70 ? 'var(--safe)' : 'var(--unsafe)';
+                        document.getElementById('route-time-factor').innerText = scoreData.factors.time;
+                        document.getElementById('route-lighting-factor').innerText = scoreData.factors.lighting;
+                        document.getElementById('route-reviews-factor').innerText = scoreData.factors.reviews;
+                    });
+            }
+        });
+    }
+
+    // Modal Logic
+    var reportModal = document.getElementById('report-modal');
+    var openReportBtns = document.querySelectorAll('a[href="#report"]');
+    var closeReportBtn = document.getElementById('close-report-modal');
+
+    openReportBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            reportModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+    });
+
+    closeReportBtn.addEventListener('click', function() {
+        reportModal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Close on clicking outside
+    reportModal.addEventListener('click', function(e) {
+        if (e.target === reportModal) {
+            reportModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Form Logic
+    var incidentForm = document.getElementById('incident-form');
+    var btnCurrentLocation = document.getElementById('btn-current-location');
+    var btnClearForm = document.getElementById('btn-clear-form');
+    var inputLocation = document.getElementById('incident-location');
+
+    btnCurrentLocation.addEventListener('click', function() {
+        if ("geolocation" in navigator) {
+            btnCurrentLocation.innerHTML = '<i data-lucide="loader" class="lucide-spin" style="color: #3b82f6; width: 16px; height: 16px;"></i> Fetching...';
+            lucide.createIcons();
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Fetch reverse geocoding to get a friendly name
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        inputLocation.value = data.display_name || `${position.coords.latitude}, ${position.coords.longitude}`;
+                        btnCurrentLocation.innerHTML = '<i data-lucide="check" style="color: #22c55e; width: 16px; height: 16px;"></i> Location captured';
+                        lucide.createIcons();
+                    })
+                    .catch(() => {
+                        inputLocation.value = `${position.coords.latitude}, ${position.coords.longitude}`;
+                        btnCurrentLocation.innerHTML = '<i data-lucide="map-pin" style="color: #ef4444; width: 16px; height: 16px;"></i> Use current location';
+                        lucide.createIcons();
+                    });
+            }, function(error) {
+                alert("Could not get location. Please ensure location permissions are enabled.");
+                btnCurrentLocation.innerHTML = '<i data-lucide="map-pin" style="color: #ef4444; width: 16px; height: 16px;"></i> Use current location';
+                lucide.createIcons();
+            });
+        } else {
+            alert("Geolocation is not supported by your browser");
+        }
+    });
+
+    btnClearForm.addEventListener('click', function() {
+        incidentForm.reset();
+        btnCurrentLocation.innerHTML = '<i data-lucide="map-pin" style="color: #ef4444; width: 16px; height: 16px;"></i> Use current location';
+        lucide.createIcons();
+    });
+
+    incidentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var submitBtn = incidentForm.querySelector('button[type="submit"]');
+        var originalText = submitBtn.innerText;
+        submitBtn.innerHTML = '<i data-lucide="loader" class="lucide-spin" style="width: 18px; height: 18px;"></i> Submitting...';
+        lucide.createIcons();
+        submitBtn.disabled = true;
+
+        var formData = {
+            type: document.getElementById('incident-type').value,
+            location: document.getElementById('incident-location').value,
+            severity: document.querySelector('input[name="severity"]:checked').value,
+            description: document.getElementById('incident-desc').value,
+            anonymous: document.getElementById('incident-anonymous').checked
+        };
+
+        fetch('/api/report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.status === 429) {
+                return response.json().then(data => { throw new Error(data.message); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Thank you! Your report has been submitted to the SafeOrbit community.");
+            incidentForm.reset();
+            btnCurrentLocation.innerHTML = '<i data-lucide="map-pin" style="color: #ef4444; width: 16px; height: 16px;"></i> Use current location';
+            lucide.createIcons();
+            document.getElementById('report-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || "An error occurred while submitting. Please try again.");
+        })
+        .finally(() => {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+
+    // --- Autocomplete Setup ---
+    function setupAutocomplete(inputId, dropdownId) {
+        const input = document.getElementById(inputId);
+        const dropdown = document.getElementById(dropdownId);
+        if (!input || !dropdown) return;
+        
+        let debounceTimer;
+
+        input.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value;
+            
+            if (query.length < 3) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+                    .then(res => res.json())
+                    .then(data => {
+                        dropdown.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                const div = document.createElement('div');
+                                div.className = 'autocomplete-item';
+                                div.textContent = item.display_name;
+                                div.addEventListener('click', () => {
+                                    input.value = item.display_name;
+                                    dropdown.style.display = 'none';
+                                });
+                                dropdown.appendChild(div);
+                            });
+                            dropdown.style.display = 'block';
+                        } else {
+                            dropdown.style.display = 'none';
+                        }
+                    }).catch(err => console.error(err));
+            }, 300);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== input && e.target !== dropdown) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
+    setupAutocomplete('map-from-input', 'map-from-dropdown');
+    setupAutocomplete('map-to-input', 'map-to-dropdown');
+    setupAutocomplete('incident-location', 'incident-location-dropdown');
+});
+</script>
+{% endblock %}
