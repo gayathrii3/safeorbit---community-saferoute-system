@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" width="300" alt="SafeOrbit Logo" />
+  <img src="./assets/logo.png" width="150" alt="SafeOrbit Logo" />
 </p>
 
 # SafeOrbit – AI-Powered HeatMap & Routing for Safer Streets
@@ -37,20 +37,6 @@ graph TD
     
     E -->|Time Analysis| I
 ```
-
----
-
-## Screenshots
-
-*(Note: Add actual screenshots to the `assets` folder once deployed)*
-
-| Live Heatmap | Incident Reporting |
-|---|---|
-| <img src="./assets/heatmap_screenshot.png" alt="Map View" width="400"/> | <img src="./assets/report_modal.png" alt="Report Incident Modal" width="400"/> |
-
-| Safe Routing (Day) | High Risk Routing (Night) |
-|---|---|
-| <img src="./assets/route_safe.png" alt="Safe Route" width="400"/> | <img src="./assets/route_unsafe.png" alt="Unsafe Route" width="400"/> |
 
 ---
 
