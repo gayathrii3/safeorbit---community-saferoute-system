@@ -84,6 +84,3 @@ A seamless UI modal allows users to submit General Safety Feedback or report spe
    ```bash
    python web.py
    ```
-
-4. **Access the application:**
-   Open your browser and navigate to `http://127.0.0.1:5000`
