@@ -14,7 +14,7 @@ By leveraging real-time data, granular time-of-day contextual analysis, and comm
 ## Demo Video
 
 <p align="center">
-  <video src="./assets/demo.mp4" width="100%" controls></video>
+  <video src="./assets/demo.mp4" width="100%" autoplay loop muted playsinline controls></video>
 </p>
 
 ---
