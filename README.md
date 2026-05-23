@@ -11,6 +11,12 @@ SafeOrbit is an advanced, AI-powered safety intelligence platform designed to im
 
 By leveraging real-time data, granular time-of-day contextual analysis, and community feedback, SafeOrbit generates responsive safety heatmaps and intelligent routing that help users avoid risky areas and make informed travel decisions.
 
+## Demo Video
+
+<p align="center">
+  <video src="./assets/demo.mp4" width="100%" controls></video>
+</p>
+
 ---
 
 ## Architecture Diagram
